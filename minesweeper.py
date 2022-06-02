@@ -141,7 +141,8 @@ def main():
             for i in range(size):
                 for j in range(size):
                     if board[i][j] == 1:
-                        view[i][j] = "B"
+                        view[i][j] = "\033[0;0;91m B\033[0;0m"
+                        # view[i][j] = "\U0001f4a3"
             run = False
             gameover = True
         show_mat(view)
