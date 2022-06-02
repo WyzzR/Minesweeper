@@ -69,10 +69,15 @@ def guess(board: list[list[int]], coord: list[int], view: list[list[str]]):
             guess(board, [x + 1, y + 1], view)
 
 
-def get_coord() -> list[int]:
-    user_input = str(input("Please enter a coord: "))
-    coord_str = user_input.split()
-    coord = [int(x) for x in coord_str]
+def get_coord(size: int) -> list[int]:
+    not_correct = True
+    while not_correct:
+        user_input = str(input("Please enter a coord: "))
+        coord_str = user_input.split()
+        coord = [int(x) for x in coord_str]
+        if coord[0] < size and coord[1] < size and len(coord) == 2:
+            not_correct = False
+
     return coord
 
 
@@ -114,9 +119,9 @@ def show_mat(mat: list):
 
 
 def main():
-    size = 5
+    size = 10
     num_bomb = 10
-    start = [4, 4]
+    start = get_coord(size)
 
     board = create_board(size, num_bomb, start)
     # # board = [
@@ -132,6 +137,7 @@ def main():
     #     [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
     # ]
     view = [["X" for x in range(size)] for x in range(size)]
+    guess(board, start, view)
 
     show_mat(board)
     show_mat(view)
@@ -140,11 +146,14 @@ def main():
 
     run = True
     while run:
-        c = get_coord()
+        c = get_coord(size)
         if verify(board, c):
             guess(board, c, view)
         else:
-            view[c[0]][c[1]] = "\U0001F4A3"
+            for i in range(size):
+                for j in range(size):
+                    if board[i][j] == 1:
+                        view[i][j] = "B"
             run = False
             gameover = True
         show_mat(view)
